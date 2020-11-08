@@ -1,0 +1,44 @@
+version: '3'
+
+services:
+    postgres:
+        container_name: postgres
+        image: postgres:12-alpine
+        environment:
+            PGDATA: /var/lib/postgresql/data
+            POSTGRES_USER: ${PG_SUPERUSER_NAME}
+            POSTGRES_PASSWORD: ${PG_USER_PASSWORD}
+        ports:
+            - 5432:5432
+        volumes:
+            - ./var/postgres/data:/var/lib/postgresql/data
+        networks:
+            - symfony
+        ulimits:
+            nofile:
+                soft: 128000
+                hard: 128000
+    php:
+        build:
+            context: .
+            dockerfile: docker/php/Dockerfile
+            args:
+                TIMEZONE: ${TIMEZONE}
+        volumes:
+            - ./symfony/:/var/www/symfony/
+        networks:
+            - symfony
+    nginx:
+        build:
+            context: .
+            dockerfile: docker/nginx/Dockerfile
+        volumes:
+            - ./symfony/:/var/www/symfony/
+        ports:
+            - 80:80
+        networks:
+            - symfony
+
+networks:
+    symfony:
+        external: true
