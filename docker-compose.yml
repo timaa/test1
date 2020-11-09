@@ -36,8 +36,10 @@ services:
             - ./symfony/:/var/www/symfony/
             - ./docker/nginx/letsencrypt/ssl:/etc/letsencrypt
             - ./docker/nginx/letsencrypt/cli.ini:/etc/letsencrypt/cli.ini
+            - ./docker/nginx/conf:/etc/nginx/conf.d
         ports:
             - 80:80
+            - 443:443
         networks:
             - symfony
 
