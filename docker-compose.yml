@@ -34,6 +34,8 @@ services:
             dockerfile: docker/nginx/Dockerfile
         volumes:
             - ./symfony/:/var/www/symfony/
+            - ./docker/nginx/letsencrypt/ssl:/etc/letsencrypt
+            - ./docker/nginx/letsencrypt/cli.ini:/etc/letsencrypt/cli.ini
         ports:
             - 80:80
         networks:
